@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <script src="/js/script.js"></script>
+    <script src="https://kit.fontawesome.com/358b4d95d6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/all.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="topnavbar" id="topnavbar">
+            <a href="/"><img src="/img/logo.png" alt="" class="logo"></a>
+            <a class="home" href="/">Home Page <i class="fas fa-home"></i></a>
+            <a class="meal" href="/package">All Package Listing</a>
+            <a class="cart" href="/welcome">Cart <i class="fas fa-shopping-cart"></i></a>
+            <a class="user" href="/signin">Sign in <i class="far fa-user"></i></a>
+            <a href="javascript:void(0);" class="icon" onclick="responsive()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        {{{body}}}
+    </main>
+
+    <footer>
+        <footer class="footerbar">
+
+            <div class="footerbar-left">
+                <h3>Subscribe for newsletter</h3>
+
+                <input id="Email" type="email" name="email" placeholder="email address goes here">
+                <button><b>Sign up</b></button>
+
+                <p class="footerbar-name">Â© 2020 Fork'n Spoon Inc.</p>
+            </div>
+
+            <div class="footerbar-right">
+                <p><b>Our social media:</b></p>
+                <div class="footerbar-icons">
+                    <a href=""><i class="fab fa-facebook-square"></i></a>
+                    <a href=""><i class="fab fa-twitter-square"></i></a>
+                    <a href=""><i class="fab fa-instagram-square"></i></a>
+                    <a href=""><i class="fas fa-envelope-square"></i></a>
+                </div>
+            </div>
+        </footer>
+</body>
+
+</html>

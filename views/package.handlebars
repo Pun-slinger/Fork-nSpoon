@@ -1,0 +1,28 @@
+<div class="banner">
+    <img class="banner-image" src="/img/banner.png" alt="banner.png">
+    <div class="banner-display-text">
+        <p class="our-meal"><b>Our meal packages</b></p>
+    </div>
+</div>
+
+<div class="top-dish">
+    <p class="title"><b>Pick a package, choose your meals, achieve your goal.</b></p>
+</div>
+
+<div class="item-container">
+    {{#each data}}
+
+    <div class="item-card">
+        <div class="item-photo">
+            <img src="/img/{{this.image}}" alt="">
+        </div>
+
+        <div class="item-info">
+            <p><b>{{this.name}}</b></p>
+            <p>{{this.desc}}</p>
+            <p><b>${{this.price}}</b></p>
+        </div>
+    </div>
+
+    {{/each}}
+</div>

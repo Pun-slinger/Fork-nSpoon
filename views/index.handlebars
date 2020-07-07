@@ -1,0 +1,57 @@
+<div class="banner">
+    <img class="banner-image" src="/img/banner.png" alt="banner.png">
+    <div class="banner-display-text">
+        <p><b>Fork'n Spoon delivers your daily meals</b></p>
+        <a href="/package">View Packages</a>
+    </div>
+    <div class="banner-text" id="banner-text">
+        <p>Order meal package, shop foods & more from home.</p>
+        <button><b>Order Now</b></button>
+    </div>
+</div>
+
+<div class="feature">
+    <p class="moto"><b>No cooking required, but eating is. It's that simple.</b></p>
+    <div class="feature-main">
+        <div class="pick">
+            <i class="fas fa-desktop"></i>
+            <p class="title"><b>Pick</b></p>
+            <p class="desc">Select from variety of delicious dishes.</p>
+        </div>
+
+        <div class="deliver">
+            <i class="fas fa-truck"></i>
+            <p class="title"><b>Deliver</b></p>
+            <p class="desc">Cooked and deliver straight to your home.</p>
+        </div>
+
+        <div class="eat">
+            <i class="fas fa-utensils"></i>
+            <p class="title"><b>Eat</b></p>
+            <p class="desc">Delicious & Nutritious</p>
+        </div>
+    </div>
+</div>
+
+<div class="top-dish">
+    <p class="title"><b>Our chefs are making these for you right now.</b></p>
+    <p class="msg">You could be chowing down on any of these meals any time you choose. Order these meals and see why
+        thousands of Canadians stock us in their fridge.</p>
+</div>
+
+<div class="item-container">
+    {{#each data}}
+    <div class="item-card">
+        <div class="item-photo">
+            <img src="/img/{{this.image}}" alt="">
+        </div>
+
+        <div class="topitem-info">
+            <p><b>{{this.name}}</b></p>
+            <p><b>${{this.price}}</b></p>
+        </div>
+    </div>
+
+
+    {{/each}}
+</div>

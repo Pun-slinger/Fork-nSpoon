@@ -1,0 +1,60 @@
+const express = require('express');
+const router = express.Router();
+
+const database = require("../models/database")
+
+router.get("/", (request, response) => {
+
+    console.log(process.env.SEND_GRID_API_KEY);
+    
+    response.render("index", {
+        title: "Fork n' Spoon",
+        data: database.getAllTopMeals()
+    })
+});
+
+router.get("/package", (request, response) => {
+
+    response.render("package", {
+        title: "All Package Listing",
+        data: database.getAllPackage()
+    })
+});
+
+router.get("/welcome", (request, response) => {
+
+    response.render("welcome", {
+        title: "Welcome",
+    })
+});
+
+router.get("/signin", (request, response) => {
+
+    response.render("signin", {
+        title: "Sign In",
+    })
+});
+
+router.post("/signin", (request, response) => {
+
+    const {fnameup,lnameup,emailup} = request.body;
+
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+    const msg = {
+        to: `${emailup}`,
+        from: 'qpham4@myseneca.ca',
+        subject: "Fork'n Spoon Customer Registeration",
+        // text: 'and easy to do anywhere, even with Node.js',
+        html: `Welcome ${fnameup} ${lnameup} to Fork'n Spoon. We hope you'll enjoy our wonderful service.<br>Customer Email: ${emailup}.`,
+    };
+    sgMail.send(msg)
+    .then(()=>{
+        response.redirect("/welcome");
+    })
+    .catch(err=>{
+        console.log(`Error ${err}`);
+    })
+});
+
+module.exports = router;

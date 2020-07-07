@@ -1,0 +1,65 @@
+<div class="forms">
+    <div class="signin">
+      <form action="">
+        <fieldset>
+          <legend><b>Customer Sign In</b></legend>
+          <div class="formicon">
+            <a href=""><i class="fab fa-facebook-square"></i></a>
+            <a href=""><i class="fab fa-twitter-square"></i></a>
+            <a href=""><i class="fab fa-instagram-square"></i></a>
+            <a href=""><i class="fas fa-envelope-square"></i></a>
+          </div>
+          <br>
+          <hr>
+          <br>
+
+          <label for="useremailin"><b>Email:</b></label>
+          <input type="text" name="useremailin" id="useremailin" placeholder="Email..." required>
+          <p id="emailerrorin"></p>
+
+          <label for="passwordin"><b>Password:</b></label>
+          <input type="password" name="passwordin" id="passwordin" placeholder="Password..." required>
+          <p id="passworderrorin"></p>
+
+          <input type="submit" name="submit" id="" value="Sign In"onclick="SignInValidation()">
+        </fieldset>
+      </form>
+    </div>
+
+    <div class="signup">
+      <form action="/signin" method="POST">
+        <fieldset>
+          <legend><b>Create an Account</b></legend>
+          <div class="formicon">
+            <a href=""><i class="fab fa-facebook-square"></i></a>
+            <a href=""><i class="fab fa-twitter-square"></i></a>
+            <a href=""><i class="fab fa-instagram-square"></i></a>
+            <a href=""><i class="fas fa-envelope-square"></i></a>
+          </div>
+          <br>
+          <hr>
+          <br>
+
+          <label for="fnameup"><b>First Name:</b></label>
+          <input type="text" name="fnameup" id="fnameup" placeholder="First Name..."required>
+          <p id="fnameerrorup"></p>
+
+          <label for="lnameup"><b>Last Name:</b></label>
+          <input type="text" name="lnameup" id="lnameup" placeholder="Last Name..."required>
+          <p id="lnameerrorup"></p>
+
+          <label for="emailup"><b>Email:</b></label>
+          <input type="text" name="emailup" id="emailup" placeholder="Email..."required>
+          <p id="emailerrorup"></p>
+
+          <label for="passwordup"><b>Password:</b></label>
+          <input type="password" name="passwordup" id="passwordup" placeholder="Password..."required 
+          pattern="[a-zA-Z0-9].{6,12}" title="Password must be 6-12 characters and must have letters and numbers only.">
+          <p id="passworderrorup"></p>
+
+          <input type="submit" name="submit" id="" value="Sign Up" onclick="SignUpValidation()">
+
+        </fieldset>
+      </form>
+    </div>
+  </div>
