@@ -37,7 +37,7 @@ router.get("/signin", (request, response) => {
 
 router.post("/signin", (request, response) => {
 
-    const {fnameup,lnameup,emailup} = request.body;
+    const {fnameup,lnameup,emailup,passwordup} = request.body;
 
     const sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
@@ -46,7 +46,10 @@ router.post("/signin", (request, response) => {
         from: 'qpham4@myseneca.ca',
         subject: "Fork'n Spoon Customer Registeration",
         // text: 'and easy to do anywhere, even with Node.js',
-        html: `Welcome ${fnameup} ${lnameup} to Fork'n Spoon. We hope you'll enjoy our wonderful service.<br>Customer Email: ${emailup}.`,
+        html: `Welcome ${fnameup} to Fork'n Spoon. We hope you'll enjoy our wonderful service.<br>
+        Customer Full Name: ${fnameup} ${lnameup}<br>
+        Customer Email: ${emailup}<br>
+        Customer Password: ${passwordup}`,
     };
     sgMail.send(msg)
     .then(()=>{
