@@ -4,8 +4,6 @@ const router = express.Router();
 const database = require("../models/database")
 
 router.get("/", (request, response) => {
-
-    console.log(process.env.SEND_GRID_API_KEY);
     
     response.render("index", {
         title: "Fork n' Spoon",

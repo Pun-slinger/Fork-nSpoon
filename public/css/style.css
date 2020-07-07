@@ -214,7 +214,7 @@ h2{
 	width: 100%;
 	text-align: left;
 	font: bold 16px sans-serif;
-  padding: 20px 100px 50px 100px;
+  padding: 20px 100px 10px 100px;
   position: absolute;
   border-top: solid;
   border-color: gray;
@@ -308,14 +308,26 @@ form{
 }
 
 .welcome{
-  margin-top: 109px;
+  margin-top: 79px;
   text-align: center;
-  margin-bottom: 110px;
+  margin-bottom: 80px;
 }
 
 .welcome h2{
   margin-left: -3px;
   margin-bottom: 50px;
+}
+
+.welcome a{
+  background-color: transparent;
+  color: lightseagreen;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-color: lightseagreen;
+  border-style: solid;
+  font-size: 40px;
 }
 
 @media screen and (max-width: 680px){
