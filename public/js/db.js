@@ -17,7 +17,7 @@ let Users;
 //check if database is connected before listenging to port
 module.exports.initialize = function(){
     return new Promise((resolve, reject)=>{
-        let db = mongoose.createConnection("mongodb+srv://new-user_1:1234567890@cluster0.omolu.mongodb.net/Web322C2020?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true });
+        let db = mongoose.createConnection(process.env.MONGOOSECONNECTION,{ useNewUrlParser: true, useUnifiedTopology: true });
         
         db.on('error', (err)=>{
             reject(err);

@@ -8,13 +8,13 @@ const generalController = require("./controllers/general");
 const { request, response } = require("express");
 require('dotenv').config({ path: "./config/keys.env" });
 
-var currentUser = {
-    email = "",
-    password = "",
-    firstName = "",
-    lastName = "",
-    loggedIn = false
-};
+// var currentUser = {
+//     email = "",
+//     password = "",
+//     firstName = "",
+//     lastName = "",
+//     loggedIn = false
+// };
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
