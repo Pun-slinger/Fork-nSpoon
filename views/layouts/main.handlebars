@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <script src="/js/script.js"></script>
+    <script src="../controllers/general.js"></script>
     <script src="https://kit.fontawesome.com/358b4d95d6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/all.css">
@@ -19,7 +20,8 @@
             <a class="home" href="/">Home Page <i class="fas fa-home"></i></a>
             <a class="meal" href="/package">All Package Listing</a>
             <a class="cart" href="">Cart <i class="fas fa-shopping-cart"></i></a>
-            <a class="user" href="/signin">Sign in <i class="far fa-user"></i></a>
+            <a class="user" id="user" href="/signin">Sign in <i class="far fa-user"></i></a>
+            <a class="logout" id="logout" href="/logout">Log Out <i class="fas fa-sign-out-alt"></i></a>
             <a href="javascript:void(0);" class="icon" onclick="responsive()">
                 <i class="fa fa-bars"></i>
             </a>

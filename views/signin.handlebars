@@ -1,3 +1,9 @@
+{{#if message}}
+  <div class="alert">
+    <strong>Error:</strong> {{message}}
+  </div>
+{{/if}}
+
 <div class="forms">
     <div class="signin">
       <form action="/signin" method="POST">
@@ -21,7 +27,7 @@
           <input type="password" name="passwordin" id="passwordin" placeholder="Password..." required>
           <p id="passworderrorin"></p>
 
-          <input type="submit" name="submit" id="" value="Sign In"onclick="SignInValidation()">
+          <input type="submit" name="submit" id="" value="Sign In" onclick="SignInLogOut()">
         </fieldset>
       </form>
     </div>

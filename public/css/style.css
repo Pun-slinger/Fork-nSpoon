@@ -26,7 +26,7 @@ body {
   margin-left: 250px;
 }
 
-.topnavbar a.home,a.register, a.meal, a.user, a.cart {
+.topnavbar a.home, a.meal, a.user, a.cart, a.logout {
   color: gray;
   margin-top: 9px;
 }
@@ -36,8 +36,19 @@ body {
   display: none;
 }
 
-.logo{
+.topnavbar .logo{
   width: 40px;
+}
+
+.topnavbar .logout{
+  float: right;
+  display: none;
+}
+
+.alert{
+  padding: 10px;
+  color: red;
+  background-color: salmon;
 }
 
 .banner{

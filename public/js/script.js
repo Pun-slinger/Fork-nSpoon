@@ -7,8 +7,20 @@ function responsive() {
     }
 }
 
+// function LogOutButton() {
+//     if (request.session.user) {
+//         document.getElementById("logout").style.display = "initial";
+//         document.getElementById("user").style.display = "none";
+//     }
+// }
+
+// var dialog = document.getElementById("myDialog"); 
+// function closeDialog() { 
+//     x.close(); 
+// } 
+
 function SignUpValidation() {
-    var fname, lname, email, password, fnameerror, lnameerror,emailerror,passworderror;
+    var fname, lname, email, password, fnameerror, lnameerror, emailerror, passworderror;
     fname = document.getElementById("fnameup").value;
     lname = document.getElementById("lnameup").value;
     email = document.getElementById("emailup").value;
@@ -16,29 +28,29 @@ function SignUpValidation() {
 
     if (fname == "") {
         fnameerror = "This field is required";
-    }else{
+    } else {
         fnameerror = "";
     }
 
     if (lname == "") {
         lnameerror = "This field is required";
-    }else{
+    } else {
         lnameerror = "";
     }
 
     if (email == "") {
         emailerror = "This field is required";
-    }else{
+    } else {
         emailerror = "";
     }
 
     if (password == "") {
         passworderror = "This field is required";
-    }else if(password == password.match(/\W/g)){
+    } else if (password == password.match(/\W/g)) {
         passworderror = "Numbers and letters only";
-    }else if(password.length < 6 || password.length > 12){
+    } else if (password.length < 6 || password.length > 12) {
         passworderror = "Password length between 6 to 12 characters only";
-    }else{
+    } else {
         passworderror = "";
     }
 
@@ -49,24 +61,29 @@ function SignUpValidation() {
 
 }
 
-function SignInValidation(){
-    var email, password,emailerror,passworderror;
+function SignInValidation() {
+    var email, password, emailerror, passworderror;
 
     email = document.getElementById("useremailin").value;
     password = document.getElementById("passwordin").value;
 
     if (email == "") {
         emailerror = "This field is required";
-    }else{
+    } else {
         emailerror = "";
     }
 
     if (password == "") {
         passworderror = "This field is required";
-    }else{
+    } else {
         passworderror = "";
     }
 
     document.getElementById("emailerrorin").innerHTML = emailerror;
     document.getElementById("passworderrorin").innerHTML = passworderror;
+}
+
+function SignInLogOut(){
+    SignInValidation();
+    //LogOutButton();
 }

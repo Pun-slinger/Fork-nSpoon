@@ -6,14 +6,16 @@ const db = require("./public/js/db.js");
 //load controllers
 const generalController = require("./controllers/general");
 const { request, response } = require("express");
+const clientSessions = require("client-sessions");
 require('dotenv').config({ path: "./config/keys.env" });
 
 // var currentUser = {
-//     email = "",
-//     password = "",
-//     firstName = "",
-//     lastName = "",
-//     loggedIn = false
+//     email: "",
+//     password: "",
+//     firstName: "",
+//     lastName: "",
+//     admin: false,
+//     loggedIn: false
 // };
 
 app.engine('handlebars', exphbs());
@@ -35,7 +37,6 @@ function onHttpStart() {
 db.initialize().then(() => {
     console.log("Data read successfully");
     app.listen(port, onHttpStart);
-
 })
     .catch((data) => {
         console.log(data);
