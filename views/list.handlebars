@@ -1,0 +1,15 @@
+{{#if message}}
+  <div class="alert">
+    <strong>Error:</strong> {{message}}
+  </div>
+{{/if}}
+
+{{#each data}}
+
+<div class="package-card">
+    <img src="{{this.image}}" alt="No photo" class="package-photo">
+    <div class="package-name">Name: {{this.name}}</div>
+    <a href="/delete?name={{this.name}}" class="btn btn-primary">Delete</a>
+</div>
+
+{{/each}}

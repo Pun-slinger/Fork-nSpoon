@@ -7,18 +7,6 @@ function responsive() {
     }
 }
 
-// function LogOutButton() {
-//     if (request.session.user) {
-//         document.getElementById("logout").style.display = "initial";
-//         document.getElementById("user").style.display = "none";
-//     }
-// }
-
-// var dialog = document.getElementById("myDialog"); 
-// function closeDialog() { 
-//     x.close(); 
-// } 
-
 function SignUpValidation() {
     var fname, lname, email, password, fnameerror, lnameerror, emailerror, passworderror;
     fname = document.getElementById("fnameup").value;
@@ -85,5 +73,4 @@ function SignInValidation() {
 
 function SignInLogOut(){
     SignInValidation();
-    //LogOutButton();
 }

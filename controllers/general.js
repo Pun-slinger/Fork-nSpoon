@@ -17,7 +17,8 @@ router.get("/", (request, response) => {
 
     response.render("index", {
         title: "Fork n' Spoon",
-        data: database.getAllTopMeals()
+        data: database.getAllTopMeals(),
+        login: true
     })
 });
 
@@ -25,13 +26,15 @@ router.get("/package", (request, response) => {
 
     response.render("package", {
         title: "All Package Listing",
-        data: database.getAllPackage()
+        data: database.getAllPackage(),
+        login: true
     })
 });
 
 router.get("/welcome", (request, response) => {
     response.render("welcome", {
         title: "Welcome",
+        login: true
     })
 });
 
@@ -47,6 +50,7 @@ function ensureSignIn(req, res, next) {
 router.get("/signin", (request, response) => {
     response.render("signin", {
         title: "Sign In",
+        login: true
     })
 });
 
@@ -80,7 +84,8 @@ router.post("/signin", (request, response) => {
             //response.redirect("/signin");
             response.render("signin", {
                 title: "Sign In",
-                message: err
+                message: err,
+                login: true
             })
         })
         //User submit Sign In button instead of Sign Up
@@ -96,18 +101,12 @@ router.post("/signin", (request, response) => {
             //Display log in page with error
             response.render("signin", {
                 title: "Sign In",
-                message: err
+                message: err,
+                login: true
             })
         })
     }
 });
-
-// function LogOutButton(data) {
-//     if (data) {
-//         document.getElementById("logout").style.display = "initial";
-//         document.getElementById("user").style.display = "none";
-//     }
-// }
 
 router.get("/dashboard", ensureSignIn, (request, response) => {
     //check if admin logging in or user logging in
@@ -115,20 +114,93 @@ router.get("/dashboard", ensureSignIn, (request, response) => {
         console.log("admin entered");
         response.render("admin-dashboard", {
             title: "Admin Dashboard",
-            data: request.session.user
+            data: request.session.user,
+            logout: true,
+            admin: true
         });
     } else {
         console.log("user entered");
         response.render("dashboard", {
             title: "User Dashboard",
-            data: request.session.user
+            data: request.session.user,
+            logout: true,
+            user: true
         });
     }
 });
 
+router.get("/list", ensureSignIn, (request, response) => {
+    if (request.session.user[0].admin == true) {
+        db.getPackage().then((data)=>{
+            response.render("list", {
+                title: "Meal Listing",
+                logout: true,
+                admin: true,
+                data: (data.length!=0)?data:undefined
+            });
+        }).catch((err)=>{
+            res.render("list",{
+                title: "Meal Listing",
+                message:err,
+                logout: true,
+                admin: true
+            });
+        })
+        
+    }
+    else{
+        response.redirect("/");
+    }
+})
+
+router.get("/add", ensureSignIn, (request, response) => {
+    if (request.session.user[0].admin == true) {
+        response.render("add", {
+            title: "Meal Listing",
+            logout: true,
+            admin: true
+        })
+    }
+    else{
+        response.redirect("/");
+    }
+})
+
+//upload.single("packagePhoto"),
+
+router.post("/add",(request, response) => {
+        db.addPackage(request.body).then(() => {
+            response.redirect("/list");
+        }).catch(err => {
+            console.log(`Error ${err}`);
+            response.render("add", {
+                title: "Meal Listing",
+                logout: true,
+                admin: true,
+                message: err
+            })
+        })
+});
+
+//Delete Route
+router.get("/delete",(req,res)=>{
+    if(req.query.name){
+      db.deletePackageByName(req.query.name).then(()=>{
+        res.redirect("/list");
+      }).catch(()=>{
+        console.log("couldn't delete package");
+        res.redirect("/list");
+      })
+    }
+    else{
+      console.log("No Query");
+      res.redirect("/list");
+    }
+  });
+
 router.get("/logout", (request, response) => {
     request.session.reset();
-    response.redirect("/signin");
+    response.redirect("/list");
 });
 
 

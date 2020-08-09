@@ -26,7 +26,7 @@ body {
   margin-left: 250px;
 }
 
-.topnavbar a.home, a.meal, a.user, a.cart, a.logout {
+.topnavbar a.home, a.meal, a.user, a.cart, a.logout, a.list, a.add {
   color: gray;
   margin-top: 9px;
 }
@@ -42,7 +42,6 @@ body {
 
 .topnavbar .logout{
   float: right;
-  display: none;
 }
 
 .alert{
@@ -279,7 +278,7 @@ h2{
   grid-template-columns: auto auto;
 }
 
-form{
+.forms form{
   width: 400px;
   margin-left: 140px;
   margin-bottom: 40px;
@@ -339,6 +338,47 @@ form{
   border-color: lightseagreen;
   border-style: solid;
   font-size: 40px;
+}
+
+.addform{
+  margin-top: 30px;
+}
+
+.addform form{
+  width: 80%;
+  margin-left: 140px;
+  margin-bottom: 40px;
+}
+
+.addform input[type=text]{
+  /* width: 80%; */
+  padding: 10px 20px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.addform input[type=number]{
+  width: 5%;
+  padding: 5px 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.addform input[type=checkbox]{
+  padding: 10px 20px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.addform textarea, input[type=submit]{
+  margin-top: 5px;
+  margin-bottom: 10px;
+  margin-left: 15px;
+}
+
+.package-photo{
+  width: 125px;
+  height: 125px;
 }
 
 @media screen and (max-width: 680px){

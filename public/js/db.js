@@ -13,7 +13,20 @@ let userSchema = new Schema({
     "admin": Boolean
 });
 
+let packageSchema = new Schema({
+    "name": {
+        "type": String,
+        "unique": true
+    },
+    "price": Number,
+    "desc": String,
+    "mealNum": Number,
+    "display": Boolean,
+    "url": String
+})
+
 let Users;
+let Packages;
 
 //check if database is connected before listening to port
 module.exports.initialize = function () {
@@ -26,6 +39,7 @@ module.exports.initialize = function () {
 
         db.once('open', () => {
             Users = db.model("users", userSchema);
+            Packages = db.model("packages",packageSchema);
             resolve();
         });
     });
@@ -49,12 +63,12 @@ module.exports.addUser = function (data) {
 
         newUser.save((err) => {
             if (err) {
-                if(err.code = 11000){
+                if (err.code = 11000) {
                     reject("Duplicate Email entered");
                 }
-                else{
-                console.log("There was an error: " + err);
-                reject(err);
+                else {
+                    console.log("There was an error: " + err);
+                    reject(err);
                 }
             }
             else {
@@ -89,10 +103,10 @@ module.exports.validateUser = (data) => {
             this.getUsersByEmail(data.useremailin).then((returnedUsers) => {
                 //get the data and check if passwords match hash
                 // first is non-hashed pw, vs 2nd which is a hashed pw
-                if(returnedUsers[0].password == data.passwordin){
+                if (returnedUsers[0].password == data.passwordin) {
                     resolve(returnedUsers);
                 }
-                else{
+                else {
                     reject("Password don't match");
                     return;
                 }
@@ -101,5 +115,70 @@ module.exports.validateUser = (data) => {
                 return;
             });
         }
+    });
+}
+
+module.exports.addPackage = function (data) {
+    return new Promise((resolve, reject) => {
+
+        data.packageDisplay = (data.packageDisplay) ? true : false;
+
+        data.packageImageUrl = (data.packageImageUrl) ? data.packageImageUrl : "/img/noimage.jpg";
+
+        for (var formEntry in data) {
+            if (data[formEntry] == "")
+                data[formEntry] = null;
+        }
+
+        //add package
+        var newPackage = new Packages({
+            name: data.packageName,
+            price: data.packagePrice,
+            desc: data.packageDesc,
+            mealNum: data.packageMealNum,
+            display: data.packageDisplay,
+            url: data.packageImageUrl
+        });
+
+        newPackage.save((err) => {
+            if (err) {
+                if (err.code = 11000) {
+                    reject("Duplicate Package Name entered");
+                }
+                else {
+                    console.log("There was an error: " + err);
+                    reject(err);
+                }
+            }
+            else {
+                console.log("Saved that package: " + data.packageName);
+                resolve();
+            }
+        });
+    });
+}
+
+module.exports.getPackage = function(){
+    return new Promise((resolve,reject)=>{
+        Packages.find()
+        .exec()
+        .then((returnedPackage)=>{
+            resolve(returnedPackage.map(item=>item.toObject()));
+        }).catch((err)=>{
+                console.log("Error Retriving Packages:"+err);
+                reject(err);
+        });
+    });
+}
+
+module.exports.deletePackageByName = (name)=>{
+    return new Promise((resolve,reject)=>{
+        Packages.deleteOne({name: name})
+        .exec()
+        .then(()=>{
+            resolve();
+        }).catch((err)=>{
+            reject(err);
+        })
     });
 }
