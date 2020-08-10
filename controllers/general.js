@@ -152,7 +152,6 @@ router.get("/dashboard", ensureSignIn, (request, response) => {
             data: request.session.user,
             user: request.session.user,
             logout: true,
-            user: true
         });
     }
 });
@@ -197,8 +196,6 @@ router.get("/add", ensureSignIn, (request, response) => {
         response.redirect("/");
     }
 })
-
-//upload.single("packagePhoto"),
 
 router.post("/add", (request, response) => {
     db.addPackage(request.body).then(() => {

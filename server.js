@@ -9,15 +9,6 @@ const { request, response } = require("express");
 const clientSessions = require("client-sessions");
 require('dotenv').config({ path: "./config/keys.env" });
 
-// var currentUser = {
-//     email: "",
-//     password: "",
-//     firstName: "",
-//     lastName: "",
-//     admin: false,
-//     loggedIn: false
-// };
-
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 

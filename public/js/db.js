@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require('bcryptjs');
 let Schema = mongoose.Schema;
 
 let userSchema = new Schema({
@@ -62,23 +62,32 @@ module.exports.addUser = function (data) {
             admin: false,
             img: data.urlup
         });
+        
+        //var newUser = new Users(data);
 
-        newUser.save((err) => {
-            if (err) {
-                if (err.code = 11000) {
-                    reject("Duplicate Email entered");
-                }
-                else {
-                    console.log("There was an error: " + err);
-                    reject(err);
-                }
-            }
-            else {
-                console.log("Saved that users: " + data.fnameup + " " + data.lnameup);
-                resolve();
-            }
-        });
-    });
+        bcrypt.genSalt(10)
+            .then(salt => bcrypt.hash(newUser.password, salt))
+            .then(hash => {
+
+                newUser.password = hash;
+
+                newUser.save((err) => {
+                    if (err) {
+                        if (err.code = 11000) {
+                            reject("Duplicate Email entered");
+                        }
+                        else {
+                            console.log("There was an error: " + err);
+                            reject(err);
+                        }
+                    }
+                    else {
+                        console.log("Saved that users: " + data.fnameup + " " + data.lnameup);
+                        resolve();
+                    }
+                });
+            });
+    })
 }
 
 module.exports.getUsersByEmail = function (inEmail) {
@@ -105,13 +114,15 @@ module.exports.validateUser = (data) => {
             this.getUsersByEmail(data.useremailin).then((returnedUsers) => {
                 //get the data and check if passwords match hash
                 // first is non-hashed pw, vs 2nd which is a hashed pw
-                if (returnedUsers[0].password == data.passwordin) {
-                    resolve(returnedUsers);
-                }
-                else {
-                    reject("Password don't match");
-                    return;
-                }
+                bcrypt.compare(data.passwordin, returnedUsers[0].password).then((result) => {
+                    if (result) {
+                        resolve(returnedUsers);
+                    }
+                    else {
+                        reject("Password don't match");
+                        return;
+                    }
+                });
             }).catch((err) => {
                 reject(err);
                 return;
