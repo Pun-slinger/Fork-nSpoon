@@ -10,7 +10,8 @@ let userSchema = new Schema({
     "password": String,
     "firstName": String,
     "lastName": String,
-    "admin": Boolean
+    "admin": Boolean,
+    "img": String
 });
 
 let packageSchema = new Schema({
@@ -39,7 +40,7 @@ module.exports.initialize = function () {
 
         db.once('open', () => {
             Users = db.model("users", userSchema);
-            Packages = db.model("packages",packageSchema);
+            Packages = db.model("packages", packageSchema);
             resolve();
         });
     });
@@ -58,7 +59,8 @@ module.exports.addUser = function (data) {
             password: data.passwordup,
             firstName: data.fnameup,
             lastName: data.lnameup,
-            admin: false
+            admin: false,
+            img: data.urlup
         });
 
         newUser.save((err) => {
@@ -158,27 +160,88 @@ module.exports.addPackage = function (data) {
     });
 }
 
-module.exports.getPackage = function(){
-    return new Promise((resolve,reject)=>{
+module.exports.getPackage = function () {
+    return new Promise((resolve, reject) => {
         Packages.find()
-        .exec()
-        .then((returnedPackage)=>{
-            resolve(returnedPackage.map(item=>item.toObject()));
-        }).catch((err)=>{
-                console.log("Error Retriving Packages:"+err);
+            .exec()
+            .then((returnedPackage) => {
+                resolve(returnedPackage.map(item => item.toObject()));
+            }).catch((err) => {
+                console.log("Error Retriving Packages:" + err);
                 reject(err);
-        });
+            });
     });
 }
 
-module.exports.deletePackageByName = (name)=>{
-    return new Promise((resolve,reject)=>{
-        Packages.deleteOne({name: name})
-        .exec()
-        .then(()=>{
-            resolve();
-        }).catch((err)=>{
-            reject(err);
-        })
+module.exports.getPackagesByName = function (inName) {
+    return new Promise((resolve, reject) => {
+        //email has to be spelled the same as in the data base
+        Packages.find({ name: inName }) //gets all and returns an array. Even if 1 or less entries
+            .exec() //tells mongoose that we should run this find as a promise.
+            .then((returnedPackage) => {
+                if (returnedPackage.length != 0)
+                    resolve(returnedPackage.map(item => item.toObject()));
+                else
+                    reject("No Packages found");
+            }).catch((err) => {
+                console.log("Error Retriving packages:" + err);
+                reject(err);
+            });
+    });
+}
+
+module.exports.getPackagesByDisplay = function (inDisplay) {
+    return new Promise((resolve, reject) => {
+        //email has to be spelled the same as in the data base
+        Packages.find({ display: inDisplay }) //gets all and returns an array. Even if 1 or less entries
+            .exec() //tells mongoose that we should run this find as a promise.
+            .then((returnedPackage) => {
+                if (returnedPackage.length != 0)
+                    resolve(returnedPackage.map(item => item.toObject()));
+                else
+                    reject("No Packages found");
+            }).catch((err) => {
+                console.log("Error Retriving packages:" + err);
+                reject(err);
+            });
+    });
+}
+
+module.exports.editPackage = (editData) => {
+    return new Promise((resolve, reject) => {
+        editData.packageDisplay = (editData.packageDisplay) ? true : false;
+        editData.packageImageUrl = (editData.packageImageUrl) ? editData.packageImageUrl : "/img/noimage.jpg";
+
+        Packages.updateOne(
+            { name: editData.packageName }, //what do we updateBy/How to find entry
+            {
+                $set: {  //what fields are we updating
+                    name: editData.packageName,
+                    price: editData.packagePrice,
+                    desc: editData.packageDesc,
+                    mealNum: editData.packageMealNum,
+                    display: editData.packageDisplay,
+                    url: editData.packageImageUrl
+                }
+            })
+            .exec() //calls the updateOne as a promise
+            .then(() => {
+                console.log(`Package ${editData.packageName} has been updated`);
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+    });
+}
+
+module.exports.deletePackageByName = (name) => {
+    return new Promise((resolve, reject) => {
+        Packages.deleteOne({ name: name })
+            .exec()
+            .then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            })
     });
 }

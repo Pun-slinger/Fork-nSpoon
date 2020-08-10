@@ -1,0 +1,37 @@
+{{#if message}}
+  <div class="alert">
+    <strong>Error:</strong> {{message}}
+  </div>
+{{/if}}
+
+<div class="editform">
+      <form action="/edit" method="POST">
+        <fieldset>
+          <legend><b>Add New Package</b></legend>
+
+          <label for="packageName"><b>Name:</b></label>
+          <input type="text" name="packageName" id="packageName" value="{{data.name}}" required>
+
+          <label for="packagePrice"><b>Price:</b></label>
+          <input type="number" name="packagePrice" id="packagePrice" step=".01" min="0" value="{{data.price}}" required><br>
+
+          <label for="packageDesc"><b>Description:</b></label><br>
+          <textarea name="packageDesc" id="packageDesc" cols="50" rows="3" required>{{data.desc}}</textarea><br>
+
+          <label for="packageMealNum"><b>Number of Meals:</b></label>
+          <input type="number" name="packageMealNum" id="packageMealNum" min="0" value="{{data.mealNum}}" required>
+
+          <label for="packageDisplay"><b>Display on Front Page ?:</b></label>
+          {{#if data.display}}
+          <input type="checkbox" name="packageDisplay" id="packageDisplay" checked><br>
+          {{else}}
+          <input type="checkbox" name="packageDisplay" id="packageDisplay"><br>
+          {{/if}}
+
+          <label for="packageImageUrl"><b>Image Url:</b></label>
+          <input type="text" name="packageImageUrl" id="packageImageUrl" value="{{data.url}}"><br>
+
+          <input type="submit" name="submit" id="submit" value="Package Edit">
+        </fieldset>
+      </form>
+    </div>

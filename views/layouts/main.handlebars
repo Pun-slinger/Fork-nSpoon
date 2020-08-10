@@ -26,7 +26,7 @@
 
             
             {{#if login}}
-            <a class="user" id="user" href="/signin">Sign in <i class="far fa-user"></i></a>
+            <a class="login" id="login" href="/signin">Sign in <i class="far fa-user"></i></a>
             {{/if}}
 
             {{#if admin}}
@@ -37,7 +37,10 @@
             
 
             {{#if logout}}
+            {{#each user}}
+            <a class="user" id="user" href="/dashboard">{{this.firstName}}<img src="{{this.img}}" alt=""></a>
             <a class="logout" id="logout" href="/logout">Log Out <i class="fas fa-sign-out-alt"></i></a>
+            {{/each}}
             {{/if}}
             <a href="javascript:void(0);" class="icon" onclick="responsive()">
                 <i class="fa fa-bars"></i>

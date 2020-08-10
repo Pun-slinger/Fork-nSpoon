@@ -26,9 +26,16 @@ body {
   margin-left: 250px;
 }
 
-.topnavbar a.home, a.meal, a.user, a.cart, a.logout, a.list, a.add {
+.topnavbar a.home, a.meal, a.user, a.cart, a.logout, a.list, a.add, a.login {
   color: gray;
   margin-top: 9px;
+}
+
+.topnavbar .user img{
+  border-style: solid;
+  border-width: 1px;
+  height: 13px;
+  width: 13px;
 }
 
 .topnavbar .icon{
@@ -189,6 +196,7 @@ h2{
 .item-photo{
   background-color: white;
   width: 255px;
+  height: 255px;
   text-align: center;
 }
 
@@ -290,7 +298,7 @@ h2{
   font-size: 40px;
 }
 
-.forms input[type=text],input[type=password]{
+.forms input[type=text],input[type=password],input[type=url]{
   width: 80%;
   padding: 10px 20px;
   margin-top: 5px;
@@ -340,37 +348,37 @@ h2{
   font-size: 40px;
 }
 
-.addform{
+.addform, .editform{
   margin-top: 30px;
 }
 
-.addform form{
+.addform form, .editform form{
   width: 80%;
   margin-left: 140px;
   margin-bottom: 40px;
 }
 
-.addform input[type=text]{
+.addform input[type=text], .editform input[type=text]{
   /* width: 80%; */
   padding: 10px 20px;
   margin-top: 5px;
   margin-bottom: 10px;
 }
 
-.addform input[type=number]{
+.addform input[type=number], .editform input[type=number]{
   width: 5%;
   padding: 5px 10px;
   margin-top: 5px;
   margin-bottom: 10px;
 }
 
-.addform input[type=checkbox]{
+.addform input[type=checkbox], .editform input[type=checkbox]{
   padding: 10px 20px;
   margin-top: 5px;
   margin-bottom: 10px;
 }
 
-.addform textarea, input[type=submit]{
+.addform textarea, input[type=submit], .editform textarea, input[type=submit]{
   margin-top: 5px;
   margin-bottom: 10px;
   margin-left: 15px;
@@ -379,6 +387,12 @@ h2{
 .package-photo{
   width: 125px;
   height: 125px;
+}
+
+.package-card{
+  border-style: solid;
+  /* display: grid;
+  grid-template-columns: auto auto auto; */
 }
 
 @media screen and (max-width: 680px){
@@ -407,21 +421,12 @@ h2{
   }
 
   .banner-display-text .our-meal{
-    /* font-size: 70px; */
     font-size: 40px;
   }
   
   .banner-display-text a{
     background-color: transparent;
     color: white;
-    /* padding: 14px 25px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    margin-left: 160px;
-    border-color: white;
-    border-style: solid;
-    font-size: 40px; */
     padding: 7px 12px;
     text-align: center;
     text-decoration: none;

@@ -7,9 +7,21 @@
 {{#each data}}
 
 <div class="package-card">
-    <img src="{{this.image}}" alt="No photo" class="package-photo">
-    <div class="package-name">Name: {{this.name}}</div>
-    <a href="/delete?name={{this.name}}" class="btn btn-primary">Delete</a>
+    <img src="{{this.url}}" alt="No photo" class="package-photo">
+    <div class="package-info">
+    <div class="package-name"><strong>Name:</strong> {{this.name}}</div>
+    <div class="package-price"><strong>Price:</strong> ${{this.price}}</div>
+    <div class="package-desc"><strong>Description:</strong> {{this.desc}}</div>
+    <div class="package-mealNum"><strong>Number of meals:</strong> {{this.mealNum}}</div>
+    {{#if display}}
+    <div class="package-display"><strong>Displayed on Front Page</strong></div>
+    {{else}}
+    <div class="package-display"><strong>Not displayed on Front Page</strong></div>
+    {{/if}}
+    </div>
+    <a href="/edit?name={{this.name}}" class="edit"><strong>Edit</strong></a>
+    <a href="/delete?name={{this.name}}" class="delete"><strong>Delete</strong></a>
+    
 </div>
 
 {{/each}}

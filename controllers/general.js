@@ -14,33 +14,59 @@ router.use(clientSessions({
 }));
 
 router.get("/", (request, response) => {
-
-    response.render("index", {
-        title: "Fork n' Spoon",
-        data: database.getAllTopMeals(),
-        login: true
+    if (request.session.user) {
+        db.getPackagesByDisplay(true).then((data) => {
+        response.render("index", {
+            title: "Fork n' Spoon",
+            data: (data.length != 0) ? data : undefined,
+            user: request.session.user,
+            logout: true
+        })
     })
+    } else {
+        db.getPackagesByDisplay(true).then((data) => {
+            response.render("index", {
+                title: "Fork n' Spoon",
+                data: (data.length != 0) ? data : undefined,
+                login: true
+            })
+        })
+    }
 });
 
 router.get("/package", (request, response) => {
-
-    response.render("package", {
-        title: "All Package Listing",
-        data: database.getAllPackage(),
-        login: true
+    if (request.session.user) {
+        db.getPackage().then((data) => {
+        response.render("package", {
+            title: "All Package Listing",
+            data: (data.length != 0) ? data : undefined,
+            user: request.session.user,
+            logout: true
+        });
     })
+    } else {
+        db.getPackage().then((data) => {
+            response.render("package", {
+                title: "All Package Listing",
+                data: (data.length != 0) ? data : undefined,
+                login: true
+            });
+        })
+    }
+
 });
 
 router.get("/welcome", (request, response) => {
     response.render("welcome", {
         title: "Welcome",
-        login: true
+        user: request.session.user,
+        logout: true
     })
 });
 
-function ensureSignIn(req, res, next) {
-    if (!req.session.user) {
-        res.redirect("/signin");
+function ensureSignIn(request, response, next) {
+    if (!request.session.user) {
+        response.redirect("/signin");
     }
     else {
         next();
@@ -58,7 +84,7 @@ router.post("/signin", (request, response) => {
     if (request.body.submit == "Sign Up") {
         db.addUser(request.body).then(() => {
 
-            const { fnameup, lnameup, emailup, passwordup } = request.body;
+            const { fnameup, lnameup, emailup, passwordup, urlup } = request.body;
 
             const sgMail = require('@sendgrid/mail');
             sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
@@ -115,6 +141,7 @@ router.get("/dashboard", ensureSignIn, (request, response) => {
         response.render("admin-dashboard", {
             title: "Admin Dashboard",
             data: request.session.user,
+            user: request.session.user,
             logout: true,
             admin: true
         });
@@ -123,6 +150,7 @@ router.get("/dashboard", ensureSignIn, (request, response) => {
         response.render("dashboard", {
             title: "User Dashboard",
             data: request.session.user,
+            user: request.session.user,
             logout: true,
             user: true
         });
@@ -131,24 +159,27 @@ router.get("/dashboard", ensureSignIn, (request, response) => {
 
 router.get("/list", ensureSignIn, (request, response) => {
     if (request.session.user[0].admin == true) {
-        db.getPackage().then((data)=>{
+        db.getPackage().then((data) => {
             response.render("list", {
                 title: "Meal Listing",
                 logout: true,
                 admin: true,
-                data: (data.length!=0)?data:undefined
+                user: request.session.user,
+                data: (data.length != 0) ? data : undefined
+
             });
-        }).catch((err)=>{
-            res.render("list",{
+        }).catch((err) => {
+            response.render("list", {
                 title: "Meal Listing",
-                message:err,
+                message: err,
                 logout: true,
-                admin: true
+                admin: true,
+                user: request.session.user,
             });
         })
-        
+
     }
-    else{
+    else {
         response.redirect("/");
     }
 })
@@ -158,49 +189,99 @@ router.get("/add", ensureSignIn, (request, response) => {
         response.render("add", {
             title: "Meal Listing",
             logout: true,
-            admin: true
+            admin: true,
+            user: request.session.user,
         })
     }
-    else{
+    else {
         response.redirect("/");
     }
 })
 
 //upload.single("packagePhoto"),
 
-router.post("/add",(request, response) => {
-        db.addPackage(request.body).then(() => {
-            response.redirect("/list");
-        }).catch(err => {
-            console.log(`Error ${err}`);
-            response.render("add", {
-                title: "Meal Listing",
+router.post("/add", (request, response) => {
+    db.addPackage(request.body).then(() => {
+        response.redirect("/list");
+    }).catch(err => {
+        console.log(`Error ${err}`);
+        response.render("add", {
+            title: "Meal Listing",
+            logout: true,
+            admin: true,
+            message: err,
+            user: request.session.user
+        })
+    })
+});
+
+router.get("/edit",ensureSignIn,(request, response) => {
+    if (request.query.name) {
+        db.getPackagesByName(request.query.name).then((packages) => {
+            response.render("edit", { 
+                title: "Meal Editing",
                 logout: true,
                 admin: true,
-                message: err
-            })
+                user: request.session.user,
+                data: packages[0] 
+            }); //using [0] because students is an array
+        }).catch((err) => {
+            console.log(err);
+            response.render("list", {
+                title: "Meal Listing",
+                message: err,
+                logout: true,
+                admin: true,
+                user: request.session.user,
+            });
+        });
+    }
+    else {
+        console.log("No Query");
+        res.redirect("/list");
+    }
+});
+
+router.post("/edit", (request, response) => {
+    db.editPackage(request.body).then(() => {
+        response.redirect("/list");
+    }).catch((err) => {
+        console.log(`Error ${err}`);
+        response.render("list", {
+            title: "Meal Editing",
+            logout: true,
+            admin: true,
+            message: err,
+            user: request.session.user
         })
+    })
 });
 
 //Delete Route
-router.get("/delete",(req,res)=>{
-    if(req.query.name){
-      db.deletePackageByName(req.query.name).then(()=>{
-        res.redirect("/list");
-      }).catch(()=>{
-        console.log("couldn't delete package");
-        res.redirect("/list");
-      })
+router.get("/delete", (request, response) => {
+    if (request.query.name) {
+        db.deletePackageByName(request.query.name).then(() => {
+            response.redirect("/list");
+        }).catch(() => {
+            console.log("couldn't delete package");
+            response.redirect("/list");
+        })
     }
-    else{
-      console.log("No Query");
-      res.redirect("/list");
+    else {
+        console.log("No Query");
+        response.render("list", {
+            title: "Meal Listing",
+            message: err,
+            logout: true,
+            admin: true,
+            user: request.session.user,
+        });
     }
-  });
+});
 
 router.get("/logout", (request, response) => {
     request.session.reset();
-    response.redirect("/list");
+    response.redirect("/signin");
 });
 
 
