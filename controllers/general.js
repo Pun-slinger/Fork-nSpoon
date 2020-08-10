@@ -9,8 +9,8 @@ const { request, response } = require('express');
 router.use(clientSessions({
     cookieName: "session", // this is the object name that will be added to 'req'
     secret: "forknknife_web322", // this should be a long un-guessable string.
-    duration: 2 * 60 * 1000, // duration of the session in milliseconds (2 minutes)
-    activeDuration: 1000 * 60 // the session will be extended by this many ms each request (1 minute)
+    duration: 4 * 60 * 1000, // duration of the session in milliseconds (2 minutes)
+    activeDuration: 2000 * 60 // the session will be extended by this many ms each request (1 minute)
 }));
 
 router.get("/", (request, response) => {
@@ -53,7 +53,28 @@ router.get("/package", (request, response) => {
             });
         })
     }
+});
 
+router.get("/package/description",ensureSignIn,(request, response) => {
+    if (request.query.name) {
+        console.log(request.query.name);
+        db.getPackagesByName(request.query.name).then((packages) => {
+            console.log(packages);
+            response.render("packagedesc", { 
+                title: packages[0].name,
+                logout: true,
+                user: request.session.user,
+                data: packages[0] 
+            }); //using [0] because students is an array
+        }).catch((err) => {
+            console.log(err);
+            response.redirect("/package");
+        });
+    }
+    else {
+        console.log("No Query");
+        response.redirect("/package");
+    }
 });
 
 router.get("/welcome", (request, response) => {
@@ -66,7 +87,11 @@ router.get("/welcome", (request, response) => {
 
 function ensureSignIn(request, response, next) {
     if (!request.session.user) {
-        response.redirect("/signin");
+        response.render("signin", {
+            title: "Sign In",
+            login: true,
+            message: "You need to sign in in order to access that page."
+        })
     }
     else {
         next();

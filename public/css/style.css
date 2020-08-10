@@ -215,6 +215,14 @@ h2{
   margin-top: 5px;
 }
 
+.item-info .name{
+  margin-left: 60px;
+}
+
+.item-info .price{
+  margin-left: 30px;
+}
+
 .topitem-info{
   float: left;
   background-color: white;
@@ -393,6 +401,48 @@ h2{
   border-style: solid;
   /* display: grid;
   grid-template-columns: auto auto auto; */
+}
+
+.packagedescpage{
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.packageinfo{
+  float: left;
+}
+
+.packageinfo .price{
+  font-size: 20px;
+  color: plum;
+}
+
+.packageinfo .mealNum{
+  margin-top: 30px;
+}
+
+.packageinfo button{
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  font-size: 15px;
+  background-color: lightseagreen;
+  color: white;
+  border: none;
+}
+
+.packageinfo .desc{
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+.packageimg img{
+  width: 550px;
+  height: 550px;
+  border-right: solid;
+  border-color: gray;
 }
 
 @media screen and (max-width: 680px){

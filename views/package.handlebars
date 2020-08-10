@@ -14,13 +14,15 @@
 
     <div class="item-card">
         <div class="item-photo">
+            <a href="/package/description?name={{this.name}}" class="package-description">
             <img src="{{this.url}}" alt="">
+            </a>
         </div>
 
         <div class="item-info">
-            <p><b>{{this.name}}</b></p>
-            <p>{{this.desc}}</p>
-            <p><b>${{this.price}}</b></p>
+            <p class="name"><b>{{this.name}}</b></p>
+            {{!-- <p>{{this.desc}}</p> --}}
+            <p class="price"><b>${{this.price}}</b></p>
         </div>
     </div>
     {{/each}}

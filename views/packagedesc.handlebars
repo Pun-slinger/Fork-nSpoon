@@ -1,0 +1,14 @@
+<div class="packagedescpage">
+    <div class="packageimg">
+        <img src="{{data.url}}" alt="">
+    </div>
+    <div class="packageinfo">
+        <h1>{{data.name}}</h1>
+        <div class="price"><b>${{data.price}}</b></div>
+        <div class="mealNum"><b>This package contain {{data.mealNum}} meals.</b></div>
+        <div><button  type="button" onclick='addToCart("{{name}}")'><b>Add to Cart</b></button></div>
+        <div class="desc">
+            {{data.desc}}
+        </div>
+    </div>
+</div>
