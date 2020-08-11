@@ -16,14 +16,26 @@ router.use(clientSessions({
 
 router.get("/", (request, response) => {
     if (request.session.user) {
-        db.getPackagesByDisplay(true).then((data) => {
-            response.render("index", {
-                title: "Fork n' Spoon",
-                data: (data.length != 0) ? data : undefined,
-                user: request.session.user,
-                logout: true,
+        if (request.session.user[0].admin == true) {
+            db.getPackagesByDisplay(true).then((data) => {
+                response.render("index", {
+                    title: "Fork n' Spoon",
+                    data: (data.length != 0) ? data : undefined,
+                    user: request.session.user,
+                    logout: true,
+                    admin: true
+                })
             })
-        })
+        }else{
+            db.getPackagesByDisplay(true).then((data) => {
+                response.render("index", {
+                    title: "Fork n' Spoon",
+                    data: (data.length != 0) ? data : undefined,
+                    user: request.session.user,
+                    logout: true,
+                })
+            })
+        }
     } else {
         db.getPackagesByDisplay(true).then((data) => {
             response.render("index", {
@@ -37,14 +49,26 @@ router.get("/", (request, response) => {
 
 router.get("/package", (request, response) => {
     if (request.session.user) {
-        db.getPackage().then((data) => {
-            response.render("package", {
-                title: "All Package Listing",
-                data: (data.length != 0) ? data : undefined,
-                user: request.session.user,
-                logout: true
-            });
-        })
+        if (request.session.user[0].admin == true) {
+            db.getPackage().then((data) => {
+                response.render("package", {
+                    title: "All Package Listing",
+                    data: (data.length != 0) ? data : undefined,
+                    user: request.session.user,
+                    logout: true,
+                    admin: true
+                });
+            })
+        } else {
+            db.getPackage().then((data) => {
+                response.render("package", {
+                    title: "All Package Listing",
+                    data: (data.length != 0) ? data : undefined,
+                    user: request.session.user,
+                    logout: true,
+                });
+            })
+        }
     } else {
         db.getPackage().then((data) => {
             response.render("package", {

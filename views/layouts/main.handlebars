@@ -28,12 +28,13 @@
             {{#if admin}}
             <a class="list" id="list" href="/list">Meal List <i class="far fa-list-alt"></i></a>
             <a class="add" id="add" href="/add">Add Meal <i class="far fa-plus-square"></i></a>
+            {{else}}
+            <a class="cart" id="cart" href="/cart">Cart <i class="fas fa-shopping-cart"></i></a>
             {{/if}}
 
             {{#if logout}}
             {{#each user}}
             <a class="user" id="user" href="/dashboard">{{this.firstName}}<img src="{{this.img}}" alt=""></a>
-            <a class="cart" id="cart" href="/cart">Cart <i class="fas fa-shopping-cart"></i></a>
             <a class="logout" id="logout" href="/logout">Log Out <i class="fas fa-sign-out-alt"></i></a>
             {{/each}}
             {{/if}}
