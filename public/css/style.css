@@ -445,6 +445,11 @@ h2{
   border-color: gray;
 }
 
+.cart{
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
 @media screen and (max-width: 680px){
   .topnavbar a:not(:first-child){
     display: none;

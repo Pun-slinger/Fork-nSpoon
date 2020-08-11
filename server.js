@@ -13,6 +13,9 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 app.use(bodyParser.urlencoded({ extended: false }))
+//setup body parser to recieve json text from AJAX calls 
+app.use(bodyParser.json());
+
 app.use(express.static("public"));
 //map each controller to the app object
 app.use("/", generalController);

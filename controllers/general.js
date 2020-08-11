@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require("../public/js/db.js");
+const cart = require("../public/js/cart.js");
 const database = require("../models/database")
 const clientSessions = require("client-sessions");
 const { request, response } = require('express');
@@ -16,13 +17,13 @@ router.use(clientSessions({
 router.get("/", (request, response) => {
     if (request.session.user) {
         db.getPackagesByDisplay(true).then((data) => {
-        response.render("index", {
-            title: "Fork n' Spoon",
-            data: (data.length != 0) ? data : undefined,
-            user: request.session.user,
-            logout: true
+            response.render("index", {
+                title: "Fork n' Spoon",
+                data: (data.length != 0) ? data : undefined,
+                user: request.session.user,
+                logout: true,
+            })
         })
-    })
     } else {
         db.getPackagesByDisplay(true).then((data) => {
             response.render("index", {
@@ -37,13 +38,13 @@ router.get("/", (request, response) => {
 router.get("/package", (request, response) => {
     if (request.session.user) {
         db.getPackage().then((data) => {
-        response.render("package", {
-            title: "All Package Listing",
-            data: (data.length != 0) ? data : undefined,
-            user: request.session.user,
-            logout: true
-        });
-    })
+            response.render("package", {
+                title: "All Package Listing",
+                data: (data.length != 0) ? data : undefined,
+                user: request.session.user,
+                logout: true
+            });
+        })
     } else {
         db.getPackage().then((data) => {
             response.render("package", {
@@ -55,16 +56,16 @@ router.get("/package", (request, response) => {
     }
 });
 
-router.get("/package/description",ensureSignIn,(request, response) => {
+router.get("/package/description", ensureSignIn, (request, response) => {
     if (request.query.name) {
         console.log(request.query.name);
         db.getPackagesByName(request.query.name).then((packages) => {
             console.log(packages);
-            response.render("packagedesc", { 
+            response.render("packagedesc", {
                 title: packages[0].name,
                 logout: true,
                 user: request.session.user,
-                data: packages[0] 
+                data: packages[0]
             }); //using [0] because students is an array
         }).catch((err) => {
             console.log(err);
@@ -75,6 +76,103 @@ router.get("/package/description",ensureSignIn,(request, response) => {
         console.log("No Query");
         response.redirect("/package");
     }
+});
+
+//AJAX route to add a product. Replies back with number of items in cart
+router.post("/addProduct", (request, response) => {
+    console.log("Adding prod with name: " + request.body.name);
+    db.getItem(request.body.name)
+        .then((item) => {
+            cart.addItem(item)
+                .then((numItems) => {
+                    response.json({ data: numItems });
+                }).catch(() => {
+                    response.json({ message: "error adding" });
+                })
+        }).catch(() => {
+            response.json({ message: "No Items found" })
+        })
+});
+
+//Route to see cart and items
+router.get("/cart", ensureSignIn, (request, response) => {
+    console.log("/cart")
+    var cartData = {
+        cart: [],
+        total: 0
+    };
+    cart.getCart().then((items) => {
+        cartData.cart = items;
+        cart.total().then((total) => {
+            cartData.total = total;
+            console.log(cartData)
+            response.render("cart", {
+                data: cartData,
+                title: "Cart",
+                user: request.session.user,
+                logout: true
+            });
+        }).catch((err) => {
+            response.send("There was an error getting total: " + err);
+        });
+    })
+        .catch((err) => {
+            res.send("There was an error: " + err);
+        });
+});
+
+//AJAX route to remove item by name. Replies back with total and list of items. 
+router.post("/removeItem", (request, response) => { //return the cart to re-render the page
+    console.log("/reomveItem")
+    var cartData = {
+        cart: [],
+        total: 0
+    };
+    cart.removeItem(request.body.name).then(cart.total)
+        .then((inTotal) => {
+            cartData.total = inTotal;
+            cart.getCart().then((items) => {
+                cartData.cart = items;
+                response.json({ data: cartData });
+            }).catch((err) => { response.json({ error: err }); });
+        }).catch((err) => {
+            response.json({ error: err });
+        })
+});
+
+router.post("/cart", (request, response) => {
+    var cartData = {
+        cart: [],
+        total: 0
+    };
+    cart.getCart().then((items) => {
+        cartData.cart = items;
+        cart.total().then((total) => {
+            cartData.total = total;
+            console.log(cartData)
+            const sgMail = require('@sendgrid/mail');
+            sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+            const msg = {
+                to: `${request.session.user[0].email}`,
+                from: 'qpham4@myseneca.ca',
+                subject: "Fork'n Spoon Order Email",
+                html: `Hello ${request.session.user[0].firstName} from Fork'n Spoon. This is your order.<br>
+                    Total of your order: $${cartData.total}<br>`
+            };
+            sgMail.send(msg)
+                .then(() => {
+                    cart.clearCart();
+                    response.redirect("/");
+                })
+                .catch(err => {
+                    console.log(`Error ${err}`);
+                })
+        }).catch((err) => {
+            response.send("There was an error getting total: " + err);
+        });
+    }).catch((err) => {
+        res.send("There was an error: " + err);
+    });
 });
 
 router.get("/welcome", (request, response) => {
@@ -237,15 +335,15 @@ router.post("/add", (request, response) => {
     })
 });
 
-router.get("/edit",ensureSignIn,(request, response) => {
+router.get("/edit", ensureSignIn, (request, response) => {
     if (request.query.name) {
         db.getPackagesByName(request.query.name).then((packages) => {
-            response.render("edit", { 
+            response.render("edit", {
                 title: "Meal Editing",
                 logout: true,
                 admin: true,
                 user: request.session.user,
-                data: packages[0] 
+                data: packages[0]
             }); //using [0] because students is an array
         }).catch((err) => {
             console.log(err);

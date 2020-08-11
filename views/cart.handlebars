@@ -1,0 +1,61 @@
+<script>
+    function makeAJAXRequest(method, url, data) {
+        if (data) {
+            console.log("Adding: " + data.name);
+            fetch(url, {
+                method: method,
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(json => {//responds with number of items in cart
+                    console.log
+                    $(".total").text(`Total: ${json.data.total}`);
+                    $(".item").empty();
+
+                    (json.data).forEach(x => {
+                        htmlStr += '<div>';
+                        htmlStr += '<img src="' + x.img + '" alt="' + x.name + '">';
+                        htmlStr += '<b>' + x.name + '</b>';
+                        htmlStr += `<button  type="button" onclick='removeFromCart("${x.name}")'>Remove from Cart</button>`;
+                        htmlStr += '</div>';
+                    });
+                    $(".item").html(htmlStr);
+                })
+
+        }
+        else {  // Make an AJAX call without providing data using the method
+            fetch(url, { method: method })
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                }).catch((message) => {
+                    alert(message);
+                });
+        }
+    }
+
+    function removeFromCart(data) {
+        console.log("Calling add with: " + data);
+        makeAJAXRequest("POST", "/removeItem", { name: data });
+    }
+</script>
+
+
+<div class="cart">
+    <div class="item">
+        {{#each data.cart}}
+        <div>
+        <img src="{{this.url}}" alt="{{this.name}}">
+        <b>{{this.name}}</b>
+        <button type="button" onclick='removeFromCart("{{name}}")'>Remove from Cart</button>
+        </div>
+        {{/each}}
+    </div>
+    <div class="checkout">
+        <form action="/cart" method="POST">
+            <b class="total">Total: {{data.total}}</b>
+            <button type="submit">Place Your Order</button>
+        </form>
+    </div>
+</div>

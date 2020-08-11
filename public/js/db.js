@@ -47,6 +47,7 @@ module.exports.initialize = function () {
 }
 
 module.exports.addUser = function (data) {
+    console.log("addUser")
     return new Promise((resolve, reject) => {
         for (var formEntry in data) {
             if (data[formEntry] == "")
@@ -62,7 +63,7 @@ module.exports.addUser = function (data) {
             admin: false,
             img: data.urlup
         });
-        
+
         //var newUser = new Users(data);
 
         bcrypt.genSalt(10)
@@ -194,6 +195,29 @@ module.exports.getPackagesByName = function (inName) {
                     resolve(returnedPackage.map(item => item.toObject()));
                 else
                     reject("No Packages found");
+            }).catch((err) => {
+                console.log("Error Retriving packages:" + err);
+                reject(err);
+            });
+    });
+}
+
+//get a single item by name
+//used to take an item and add it to cart
+module.exports.getItem = (inName) => {
+    console.log("Get Item: "+ inName);
+    return new Promise((resolve, reject) => {
+        Packages.find({ name: inName })
+            .exec()
+            .then((returnedPackage) => {
+                console.log(returnedPackage)
+                if (returnedPackage.length > 0) {
+                    console.log("Got Item: " + JSON.stringify(returnedPackage[0]));
+                    resolve(returnedPackage[0]);
+                }
+                else {
+                    reject("Couldn't find Item");
+                }
             }).catch((err) => {
                 console.log("Error Retriving packages:" + err);
                 reject(err);

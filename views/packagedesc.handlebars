@@ -1,3 +1,36 @@
+<script>
+    function makeAJAXRequest(method, url, data) {
+        if (data) { // Make an AJAX call using the provided data & method
+            console.log("Adding: " + data.name);
+            fetch(url, {
+                method: method,
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .catch((err) => {
+                    console.log("Error Fetching");
+                    alert(err.message);
+                });
+
+        } else {  // Make an AJAX call without providing data using the method
+            fetch(url, { method: method })
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                }).catch((message) => {
+                    alert(message);
+                });
+        }
+    }
+
+    function addToCart(data) {
+        console.log("addtoCart");
+        console.log("Calling add with: " + data);
+        makeAJAXRequest("POST", "/addProduct", { name: data });
+    }
+</script>
+
 <div class="packagedescpage">
     <div class="packageimg">
         <img src="{{data.url}}" alt="">
@@ -6,7 +39,7 @@
         <h1>{{data.name}}</h1>
         <div class="price"><b>${{data.price}}</b></div>
         <div class="mealNum"><b>This package contain {{data.mealNum}} meals.</b></div>
-        <div><button  type="button" onclick='addToCart("{{name}}")'><b>Add to Cart</b></button></div>
+        <div><button type="button" onclick='addToCart("{{data.name}}")'><b>Add to Cart</b></button></div>
         <div class="desc">
             {{data.desc}}
         </div>
